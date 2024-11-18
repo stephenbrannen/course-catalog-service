@@ -1,0 +1,12 @@
+---
+spring:
+  application:
+    name: course-catalog-service
+message: Hello from default profile
+
+#--- # If using a single application.yml file you can separeate the profiles with ---
+#spring:
+#  config:
+#    activate:
+#      on-profile: prod
+#message: Hello from prod profile

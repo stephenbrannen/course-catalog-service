@@ -1,0 +1,3 @@
+---
+# Separate configuration for prod profile, only requires the properties that are different from the default profile
+message: Hello from prod profile
