@@ -17,13 +17,13 @@ class GreetingControllerUnitTest {
     lateinit var webTestClient: WebTestClient
 
     @MockkBean
-    lateinit var greetingsServiceMock: GreetingsService
+    lateinit var greetingsServiceMockk: GreetingsService
 
     @Test
     fun retrieveGreeting() {
         val name = "Dilip"
 
-        every { greetingsServiceMock.retrieveGreeting(any()) } returns "$name, Hello from default profile"
+        every { greetingsServiceMockk.retrieveGreeting(any()) } returns "$name, Hello from default profile"
 
         val result = webTestClient.get()
             .uri("/v1/greetings/{name}", name)

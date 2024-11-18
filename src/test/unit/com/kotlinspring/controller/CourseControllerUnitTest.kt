@@ -2,38 +2,37 @@ package com.kotlinspring.controller
 
 import com.kotlinspring.dto.CourseDTO
 import com.kotlinspring.entity.Course
-import com.kotlinspring.repository.CourseRepository
-import com.kotlinspring.util.courseEntityList
+import com.kotlinspring.service.CourseService
+import com.kotlinspring.util.courseDTO
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
+import io.mockk.just
+import io.mockk.runs
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ActiveProfiles
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.test.web.reactive.server.WebTestClient
 import kotlin.test.assertEquals
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@WebMvcTest(controllers = [CourseController::class])
 @AutoConfigureWebTestClient
-class CourseControllerIntegrationTest {
+class CourseControllerUnitTest {
+    @Autowired
+    private lateinit var courseService: CourseService
+
     @Autowired
     lateinit var webTestClient: WebTestClient
 
-    @Autowired
-    lateinit var courseRepository: CourseRepository
-
-    @BeforeEach
-    fun setUp() {
-        courseRepository.deleteAll()
-        val courses = courseEntityList()
-        courseRepository.saveAll(courses)
-    }
+    @MockkBean
+    lateinit var courseServiceMockk: CourseService
 
     @Test
     fun addCourse() {
         val courseDTO = CourseDTO(null, "Build Restful APIs using SpringBoot and Kotlin", "Development")
+
+        every { courseServiceMockk.addCourse(any()) } returns courseDTO(id=1)
 
         val savedCourseDTO = webTestClient
             .post()
@@ -49,7 +48,30 @@ class CourseControllerIntegrationTest {
     }
 
     @Test
+    fun addCourse_validation() {
+        val courseDTO = CourseDTO(null, "", "")
+
+        every { courseServiceMockk.addCourse(any()) } returns courseDTO(id=1)
+
+        val savedCourseDTO = webTestClient
+            .post()
+            .uri("/v1/courses")
+            .bodyValue(courseDTO)
+            .exchange()
+            .expectStatus().isBadRequest
+
+        //Assertions.assertTrue(savedCourseDTO!!.id != null)
+    }
+
+    @Test
     fun retrieveAllCourses() {
+
+        every { courseService.retrieveAllCourses() } returns listOf(
+            courseDTO(id=1),
+            courseDTO(id=2),
+            courseDTO(id=3)
+        )
+
         val courseDTOs = webTestClient
             .get()
             .uri("/v1/courses")
@@ -64,11 +86,11 @@ class CourseControllerIntegrationTest {
 
     @Test
     fun updateCourse() {
-        val course = Course(null,"Build RestFul APis using SpringBoot and Kotlin", "Development")
-        courseRepository.save(course)
-
+        val course = Course(1,"Build RestFul APis using SpringBoot and Kotlin", "Development")
         val updatedCourseName = "Build Restful APIs using SpringBoot and Kotlin1"
         val updatedCourseDTO = CourseDTO(null, updatedCourseName, "Development")
+
+        every { courseServiceMockk.updateCourse(any(), any()) } returns courseDTO(id=1, name=updatedCourseName)
 
         val updatedCourse = webTestClient
             .put()
@@ -85,8 +107,9 @@ class CourseControllerIntegrationTest {
 
     @Test
     fun deleteCourse() {
-        val course = Course(null,"Build RestFul APis using SpringBoot and Kotlin", "Development")
-        courseRepository.save(course)
+        val course = Course(1,"Build RestFul APis using SpringBoot and Kotlin", "Development")
+
+        every { courseServiceMockk.deleteCourse(any()) } just runs
 
         webTestClient
             .delete()
