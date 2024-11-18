@@ -50,17 +50,41 @@ class CourseControllerUnitTest {
     @Test
     fun addCourse_validation() {
         val courseDTO = CourseDTO(null, "", "")
+        val errorMessage = "courseDTO.category must not be blank, courseDTO.name must not be blank"
 
         every { courseServiceMockk.addCourse(any()) } returns courseDTO(id=1)
 
-        val savedCourseDTO = webTestClient
+        val response = webTestClient
             .post()
             .uri("/v1/courses")
             .bodyValue(courseDTO)
             .exchange()
             .expectStatus().isBadRequest
+            .expectBody(String::class.java)
+            .returnResult()
+            .responseBody
 
-        //Assertions.assertTrue(savedCourseDTO!!.id != null)
+        assertEquals(errorMessage, response)
+    }
+
+    @Test
+    fun addCourse_runtimeException() {
+        val courseDTO = CourseDTO(null, "Build Restful APIs using SpringBoot and Kotlin", "Development")
+        val errorMessage = "Unexpected error occurred"
+
+        every { courseServiceMockk.addCourse(any()) } throws RuntimeException(errorMessage)
+
+        val response = webTestClient
+            .post()
+            .uri("/v1/courses")
+            .bodyValue(courseDTO)
+            .exchange()
+            .expectStatus().is5xxServerError
+            .expectBody(String::class.java)
+            .returnResult()
+            .responseBody
+
+        assertEquals(errorMessage, response)
     }
 
     @Test
