@@ -18,19 +18,16 @@ repositories {
 	mavenCentral()
 }
 
-val kotlinLoggingVersion = "2.0.11"
-val mockkVersion = "1.10.4"
-val springMockkVersion = "3.0.1"
-
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.micrometer:micrometer-tracing-bridge-brave")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	//logging
-	implementation("io.github.microutils:kotlin-logging-jvm:$kotlinLoggingVersion")
+	implementation("io.github.microutils:kotlin-logging-jvm")
 
 	runtimeOnly("com.h2database:h2")
 	// runtimeOnly("org.postgresql:postgresql")
@@ -38,8 +35,8 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-webflux")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-	testImplementation("io.mockk:mockk:$mockkVersion")
-	testImplementation("com.ninja-squad:springmockk:$springMockkVersion")
+	testImplementation("io.mockk:mockk")
+	testImplementation("com.ninja-squad:springmockk")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
