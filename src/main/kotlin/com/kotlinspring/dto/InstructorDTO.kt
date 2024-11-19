@@ -4,6 +4,6 @@ import jakarta.validation.constraints.NotBlank
 
 class InstructorDTO(
     var id: Int?,
-    @get:NotBlank(message = "InstructorDTO.name must not be blank")
+    @get:NotBlank(message = "instructorDTO.name must not be blank")
     var name: String,
 )

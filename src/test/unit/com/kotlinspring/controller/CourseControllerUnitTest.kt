@@ -1,9 +1,9 @@
 package com.kotlinspring.controller
 
+import com.kotlinspring.controller.util.courseDTO
 import com.kotlinspring.dto.CourseDTO
 import com.kotlinspring.entity.Course
 import com.kotlinspring.service.CourseService
-import com.kotlinspring.controller.util.courseDTO
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.just
@@ -30,7 +30,7 @@ class CourseControllerUnitTest {
 
     @Test
     fun addCourse() {
-        val courseDTO = CourseDTO(null, "Build Restful APIs using SpringBoot and Kotlin", "Development")
+        val courseDTO = CourseDTO(null, "Build Restful APIs using SpringBoot and Kotlin", "Development", 1)
 
         every { courseServiceMockk.addCourse(any()) } returns courseDTO(id=1)
 
@@ -50,7 +50,7 @@ class CourseControllerUnitTest {
     @Test
     fun addCourse_validation() {
         val courseDTO = CourseDTO(null, "", "")
-        val errorMessage = "courseDTO.category must not be blank, courseDTO.name must not be blank"
+        val errorMessage = "courseDTO.category must not be blank, courseDTO.instructorId must not be null, courseDTO.name must not be blank"
 
         every { courseServiceMockk.addCourse(any()) } returns courseDTO(id=1)
 
@@ -69,7 +69,7 @@ class CourseControllerUnitTest {
 
     @Test
     fun addCourse_runtimeException() {
-        val courseDTO = CourseDTO(null, "Build Restful APIs using SpringBoot and Kotlin", "Development")
+        val courseDTO = CourseDTO(null, "Build Restful APIs using SpringBoot and Kotlin", "Development", 1)
         val errorMessage = "Unexpected error occurred"
 
         every { courseServiceMockk.addCourse(any()) } throws RuntimeException(errorMessage)

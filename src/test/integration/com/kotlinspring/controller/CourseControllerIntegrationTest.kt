@@ -1,9 +1,11 @@
 package com.kotlinspring.controller
 
+import com.kotlinspring.controller.util.courseEntityList
+import com.kotlinspring.controller.util.instructorEntity
 import com.kotlinspring.dto.CourseDTO
 import com.kotlinspring.entity.Course
 import com.kotlinspring.repository.CourseRepository
-import com.kotlinspring.controller.util.courseEntityList
+import com.kotlinspring.repository.InstructorRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -20,6 +22,9 @@ import kotlin.test.assertEquals
 @AutoConfigureWebTestClient
 class CourseControllerIntegrationTest {
     @Autowired
+    private lateinit var instructorRepository: InstructorRepository
+
+    @Autowired
     lateinit var webTestClient: WebTestClient
 
     @Autowired
@@ -28,13 +33,20 @@ class CourseControllerIntegrationTest {
     @BeforeEach
     fun setUp() {
         courseRepository.deleteAll()
-        val courses = courseEntityList()
+        instructorRepository.deleteAll()
+
+        val instructor = instructorEntity()
+        instructorRepository.save(instructor)
+
+        val courses = courseEntityList(instructor)
         courseRepository.saveAll(courses)
     }
 
     @Test
     fun addCourse() {
-        val courseDTO = CourseDTO(null, "Build Restful APIs using SpringBoot and Kotlin", "Development")
+        val instructor = instructorRepository.findAll().first()
+
+        val courseDTO = CourseDTO(null, "Build Restful APIs using SpringBoot and Kotlin", "Development", instructor!!.id)
 
         val savedCourseDTO = webTestClient
             .post()
@@ -83,7 +95,8 @@ class CourseControllerIntegrationTest {
 
     @Test
     fun updateCourse() {
-        val course = Course(null,"Build RestFul APis using SpringBoot and Kotlin", "Development")
+        val instructor = instructorRepository.findAll().first()
+        val course = Course(null,"Build RestFul APis using SpringBoot and Kotlin", "Development", instructor)
         courseRepository.save(course)
 
         val updatedCourseName = "Build Restful APIs using SpringBoot and Kotlin1"
@@ -104,7 +117,8 @@ class CourseControllerIntegrationTest {
 
     @Test
     fun deleteCourse() {
-        val course = Course(null,"Build RestFul APis using SpringBoot and Kotlin", "Development")
+        val instructor = instructorRepository.findAll().first()
+        val course = Course(null,"Build RestFul APis using SpringBoot and Kotlin", "Development", instructor)
         courseRepository.save(course)
 
         webTestClient
