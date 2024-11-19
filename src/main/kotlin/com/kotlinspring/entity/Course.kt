@@ -11,3 +11,12 @@ data class Course(
     var name : String = "",
     var category : String ="",
 )
+
+@Entity
+@Table(name = "Instructors")
+data class Instructor(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id : Int? = null,
+    var name : String = "",
+)

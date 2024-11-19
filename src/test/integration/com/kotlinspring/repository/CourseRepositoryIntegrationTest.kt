@@ -1,6 +1,6 @@
 package com.kotlinspring.repository
 
-import com.kotlinspring.util.courseEntityList
+import com.kotlinspring.controller.util.courseEntityList
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

@@ -1,4 +1,4 @@
-package com.kotlinspring.util
+package com.kotlinspring.controller.util
 
 import com.kotlinspring.dto.CourseDTO
 import com.kotlinspring.entity.Course
@@ -6,7 +6,7 @@ import com.kotlinspring.entity.Course
 /*fun courseDTO(
     id: Int? = null,
     name: String = "Build RestFul APis using Spring Boot and Kotlin",
-    category: String = "Dilip Sundarraj",
+    category: String = "Development",
 ) = CourseDTO(
     id,
     name,
@@ -28,8 +28,8 @@ fun courseEntityList() = listOf(
 
 fun courseDTO(
     id: Int? = null,
-    name: String = "Build RestFul APis using Spring Boot and Kotlin",
-    category: String = "Dilip Sundarraj",
+    name: String = "Build RestFul APis using SpringBoot and Kotlin",
+    category: String = "Development",
     //instructorId: Int? = 1
 ) = CourseDTO(
     id,

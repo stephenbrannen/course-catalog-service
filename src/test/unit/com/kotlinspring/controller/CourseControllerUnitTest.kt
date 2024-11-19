@@ -3,7 +3,7 @@ package com.kotlinspring.controller
 import com.kotlinspring.dto.CourseDTO
 import com.kotlinspring.entity.Course
 import com.kotlinspring.service.CourseService
-import com.kotlinspring.util.courseDTO
+import com.kotlinspring.controller.util.courseDTO
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.just
@@ -90,7 +90,7 @@ class CourseControllerUnitTest {
     @Test
     fun retrieveAllCourses() {
 
-        every { courseService.retrieveAllCourses() } returns listOf(
+        every { courseService.retrieveAllCourses(any()) } returns listOf(
             courseDTO(id=1),
             courseDTO(id=2),
             courseDTO(id=3)
