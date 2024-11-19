@@ -10,13 +10,7 @@ data class Course(
     val id : Int? = null,
     var name : String = "",
     var category : String ="",
-)
-
-@Entity
-@Table(name = "Instructors")
-data class Instructor(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    val id : Int? = null,
-    var name : String = "",
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "INSTRUCTOR_ID", nullable = false)
+    val instructor: Instructor? = null
 )
